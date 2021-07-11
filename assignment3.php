@@ -28,7 +28,23 @@ if (isset($_POST['create']) && !empty($_POST['name']) && !empty($_POST['task']))
 		$msg = 'Failed to create new Task';
 	}
 }
-  
+if (isset($_POST['update']) && !empty($_POST['name']) && !empty($_POST['task'])) {
+    $name = $_POST['name'];
+    $task = $_POST['task'];
+    $query = " SELECT name from task WHERE name = '$name'";
+    $result = mysqli_query($conn, $query);
+    if ($result) {		
+	    $query = " UPDATE task SET task = '$task' WHERE name = '$name'";
+	    $result = mysqli_query($conn, $query);
+        if ($result) {
+		    header("refresh: 2; url=assignment3.php");
+		    echo "Edit Succesful";
+	    }
+    }    
+	else {
+		$msg = 'Failed to Edit';
+	}
+}   
 $query = "SELECT * FROM task";
 $result = mysqli_query($conn,$query);
 if (mysqli_num_rows($result) > 0){
@@ -64,5 +80,5 @@ if (mysqli_num_rows($result) > 0){
 <h4> <?php echo $msg; ?> </h4>
 <p> Name: <input type="text" name="name" placeholder="Name" required /> </p>
 <p> Task: <input type="text" name="task" placeholder="Task" required /> </p>
-<input name="create" type="submit" value="Create" />
+<input name="create" type="submit" value="Create" /> <input name="update" type="submit" value="Update" />
 </form>
